@@ -3,42 +3,57 @@
 
 // Changes here require a server restart.
 // To restart press CTRL + C in terminal and run `gridsome develop`
-
 module.exports = {
-  siteName: 'Acisliver',
-  templates: {
-    Portfolio: '/project/:title',
-    Tag: '/tag/:id'
-  },
+  siteName: "acisliver's blog",
   plugins: [
+    // Load all Blog Posts from file system
     {
       use: '@gridsome/source-filesystem',
       options: {
-        typeName: 'Portfolio',
-        path: 'content/works/*.md',
+        path: 'content/posts/**/*.md',
+        typeName: 'Post',
         refs: {
           tags: {
             typeName: 'Tag',
-            create: true
-          }
-        }
-      }
+            create: true,
+          },
+        },
+      },
     },
+
+    // Netlify CMS Plugin
+
     {
       use: `gridsome-plugin-netlify-cms`,
       options: {
-        publicPath: `/admin`
-      }
+        publicPath: `/admin`,
+      },
     },
-    {
-      use: 'gridsome-plugin-netlify-cms-paths',
-      options: {
-        contentTypes: ['Portfolio'],
-        coverField: 'cover_image'
-      }
-    }
   ],
+
+  templates: {
+    Post: [
+      {
+        path: '/blog/:year/:month/:day/:slug',
+        componenent: '~/templates/Post.vue',
+      },
+    ],
+    Tag: [
+      {
+        path: '/tag/:slug',
+        componenent: '~/templates/Tag.vue',
+      },
+    ],
+  },
+
   transformers: {
-    remark: {}
-  }
+    remark: {
+      externalLinksTarget: '_blank',
+      externalLinksRel: ['nofollow', 'noopener', 'noreferrer'],
+      anchorClassName: 'icon icon-link',
+      plugins: [
+        // ...global plugins
+      ],
+    },
+  },
 };

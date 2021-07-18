@@ -1,47 +1,39 @@
 <template>
-  <Layout :showNav="true">
-    <h1>{{ $page.tag.title}}</h1>
-
-    <div class="work-cards">
-      <WorkCard v-for="edge in $page.tag.belongsTo.edges" :key="edge.node.id" :work="edge.node" />
-    </div>
+  <Layout :pageTitle="`${$route.params.slug} 태그`">
+    <section class="section">
+      <div class="container">
+        <ul v-for="post in $page.posts.edges" :key="post.node.id">
+          <li>
+            <PostItem :post="post" />
+          </li>
+          <hr />
+        </ul>
+      </div>
+    </section>
   </Layout>
 </template>
+
 <page-query>
-query Tag ($id: ID!) {
-  tag(id: $id) {
-    title
-    belongsTo (sortBy: "date") {
-      edges {
-        node {
-          ... on Portfolio {
-            id
-            title
-            path
-            cover_image(width: 700, height: 400, blur: 7, fit:cover )
-            date(format: "D. MMMM YYYY")
-          }
+query BlogsByTags($id: ID) {
+  posts: allPost (filter: {tags: {contains: [$id]}}) {
+    edges {
+      node {
+        title
+        path
+        excerpt
+        tags {
+          id
+          path
         }
       }
     }
   }
 }
-
 </page-query>
+
 <script>
-import WorkCard from '~/components/WorkCard.vue';
+import PostItem from '../components/PostItem';
 export default {
-  name: 'tag',
-  components: {
-    WorkCard
-  },
-  metaInfo() {
-    return {
-      title: this.$page.tag.title
-    };
-  }
+  components: { PostItem },
 };
 </script>
-
-<style>
-</style>

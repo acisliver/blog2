@@ -1,32 +1,27 @@
 <template>
-  <div>
-    <header class="header">
-      <div class="navigation-bar">
-        <strong>
-          <g-link to="/post">{{ $static.metadata.siteName }}</g-link>
-        </strong>
-        <nav v-if="showNav" class="nav">
-          <g-link class="nav__link" to="/post">Post</g-link>
-          <g-link class="nav__link" to="/">Work</g-link>
-          <g-link class="nav__link" to="/about/">About</g-link>
-          <g-link class="nav__link" to="/contact/">Contact</g-link>
-        </nav>
+  <div class="layout">
+    <Navbar />
+    <section class="hero is-medium is-primary">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title is-1">
+            {{ pageTitle }}
+          </h1>
+          <h2 v-if="pageSubtitle" class="subtitle">
+            {{ pageSubtitle }}
+          </h2>
+        </div>
       </div>
-    </header>
-    <div class="wrapper">
-      <div class="layout">
-        <slot />
-      </div>
-    </div>
+    </section>
+    <main>
+      <slot />
+    </main>
     <footer class="footer">
-      <div class="footer__content">
+      <div class="content has-text-centered">
         <p>
-          Built with 🍻 by
-          <a target="_blank" href="//edmundekott.me">Edmund Ekott</a>
-        </p>
-        <p>
-          Powered by
-          <a target="_blank" href="//gridsome.org">Gridsome</a>
+          Created by <a href="chadcollins.net"><strong>Chad Collins</strong></a
+          >. Powered by <a href="https://gridsome.org/"><strong>Gridsome</strong></a
+          >.
         </p>
       </div>
     </footer>
@@ -42,92 +37,21 @@ query {
 </static-query>
 
 <script>
+import Navbar from '../components/Navbar';
 export default {
-  props: {
-    showNav: {
-      default: true
-    }
-  }
+  props: { pageTitle: '', pageSubtitle: '', color: '' },
+  components: { Navbar },
 };
 </script>
 
+<style lang="scss">
+@import '@/assets/scss/overrides.scss';
 
-<style lang='scss'>
-.wrapper {
-  background-color: var(--bg-color);
-  min-height: 80vh;
-  padding-top: 40px;
-}
-.layout {
-  max-width: 960px;
-  margin: 0 auto;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 30px;
-}
-.header {
-  background: var(--bg-header);
-}
-.navigation-bar {
-  max-width: 960px;
-  margin: 0 auto;
-  padding-left: 20px;
-  padding-right: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 80px;
-
-  a {
-    color: #ffffff;
-  }
-
-  .nav {
-    .active--exact {
-      color: var(--link-color);
-    }
-
-    &__link {
-      margin-left: 20px;
-
-      &:hover {
-        color: var(--link-color);
-      }
-    }
-  }
-}
-
-.footer {
-  background: var(--bg-footer);
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-
-  p {
-    a {
-      color: currentColor;
-      text-decoration: underline;
-    }
-  }
-}
-@media screen and (max-width: 650px) {
-  .header {
-    height: 65px;
-  }
-}
-@media screen and (min-width: 760px) {
-  .header {
-    position: sticky;
-    top: 0px;
-    z-index: 1000;
-  }
-}
-@media screen and (min-width: 1024px) {
-  .layout,
-  .navigation-bar {
-    max-width: 1000px;
-  }
+body {
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
 }
 </style>
